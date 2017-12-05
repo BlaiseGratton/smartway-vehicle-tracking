@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="static/main.css">
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="static/vue-google-maps.js"></script>
+  </head>
+  <body>
+    <h1>Hello, friend!</h1>
+    <main id="app">
+      {{message}}
+      <gmap-map :zoom="zoom" :center="center" style="width: 80%; height: 500px; margin: auto">
+        <gmap-marker v-for="(camera, index) in cameras"
+                     :key="index"
+                     :position="camera.location.coordinates[0]"
+                     :title="camera.description"
+                     @click="openInfoWindow(camera)">
+        </gmap-marker>
+        <gmap-info-window v-for="(window, index) in infoWindows"
+                          :position="window.position"
+                          :options="window.options">
+        </gmap-info-window>
+      </gmap-map>
+    </main>
+    <script src="static/app.js"></script>
+  </body>
+</html>
