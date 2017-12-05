@@ -27,7 +27,10 @@ const map = new Vue({
     openInfoWindow: function (camera) {
       this.infoWindows.push({
         options: {
-          content: camera.description
+          content: `
+            <h1>${camera.description}<h1>
+            <img src="/api/stream/test/">
+          `
         },
         position: camera.location.coordinates[0]
       })

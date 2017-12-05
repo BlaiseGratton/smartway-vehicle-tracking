@@ -1,6 +1,6 @@
 # import os
 
-from flask import Flask, jsonify, send_file
+from flask import Flask, Response, send_file
 # import requests
 
 from video import init_logging, main
@@ -8,10 +8,10 @@ from video import init_logging, main
 app = Flask(__name__)
 
 
-@app.route('/api/startcamera')
-def start_camera():
-    main()
-    return jsonify('Started')
+@app.route('/api/stream/<string:camera_url>/')
+def start_camera(camera_url):
+    return Response(main(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @app.route('/api/cameras/')

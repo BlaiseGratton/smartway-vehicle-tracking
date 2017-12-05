@@ -130,14 +130,6 @@ def process_frame(frame_number, frame, bg_subtractor, car_counter):
 
     # Create a copy of source frame to draw onto
     processed = frame.copy()
-    # Draw dividing line - we count cars as they cross this line
-    cv2.line(
-        processed,
-        (0, car_counter.divider),
-        (frame.shape[1], car_counter.divider),
-        DIVIDER_COLOR,
-        1
-    )
     # Remove the background
     fg_mask = bg_subtractor.apply(frame, None, 0.01)
     fg_mask = filter_mask(fg_mask)
@@ -227,15 +219,20 @@ def main():
             processed,
             'processed frame #%d'
         )
-        cv2.imshow('Source Image', frame)
-        cv2.imshow('Processed Image', processed)
 
         log.debug('Frame #%d processed', frame_number)
 
         if __name__ == '__main__':
+            cv2.imshow('Source Image', frame)
+            cv2.imshow('Processed Image', processed)
             c = cv2.waitKey(WAIT_TIME)
             if c == 27:
                 break
+        else:
+            cv2.imwrite('temp.jpg', processed)
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' +
+                   open('temp.jpg', 'rb').read() + b'\r\n')
 
     log.debug('Closing video capture device')
     cap.release()
